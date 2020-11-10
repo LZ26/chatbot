@@ -3,6 +3,7 @@ const path = require('path');
 const volleyball = require('volleyball');
 
 const app = express();
+require('dotenv').config();
 
 // logging middleware
 // Only use logging middleware when not running tests

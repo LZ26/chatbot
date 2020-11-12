@@ -3,8 +3,6 @@ const AssistantV2 = require('ibm-watson/assistant/v2');
 const { IamAuthenticator } = require('ibm-watson/auth');
 const HttpsProxyAgent = require('https-proxy-agent');
 
-// const httpsAgent = new HttpsProxyAgent('http://localhost:3000');
-
 const newAuthenticator = new IamAuthenticator({
   apikey: process.env.WATSON_ASSISTANT_APIKEY,
 });
@@ -13,10 +11,6 @@ const assistant = new AssistantV2({
   version: '2020-09-24',
   authenticator: newAuthenticator,
   url: process.env.WATSON_ASSISTANT_URL,
-  // headers: {
-  //   'X-Watson-Learning-Opt-Out': 'true',
-  // },
-  // httpsAgent,
 });
 
 router.get('/session', async (req, res) => {

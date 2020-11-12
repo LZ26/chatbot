@@ -54,5 +54,6 @@
     "sequelize": "^6.3.5",
     "socket.io": "^3.0.1",
     "tunnel": "0.0.6"
-  }
+  },
+  "proxy": "http://localhost:3000"
 }

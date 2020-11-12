@@ -16,12 +16,19 @@ const Chat = ({ chat, userMessage }) => {
       setMessage('');
     }
   };
+  console.log(localStorage);
 
   return (
     <div className="chat">
       <h1>Customer Care Chatbot (CCBot)</h1>
       {/*handle messages */}
-      <div>Messages would go here:</div>
+      {chat.length === 0
+        ? ''
+        : chat.map((txt) => (
+            <div key={txt.id} className={txt.type}>
+              {txt.message}
+            </div>
+          ))}
       {/*input box */}
       <input
         id="chatField"

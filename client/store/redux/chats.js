@@ -19,10 +19,11 @@ export const userMessage = (message) => async (dispatch) => {
 
 //action that creates session - API
 
-export const newSessionCreate = () => async (dispatch) => {
+export const newSession = () => async (dispatch) => {
   try {
-    const { data } = await axios.get('/api/chats/session');
-    dispatch({ type: SESSION_SUCCESS, payload: data });
+    const res = await axios.get('/api/chats/session');
+
+    dispatch({ type: SESSION_SUCCESS, payload: res.data });
   } catch (err) {
     dispatch({ type: SESSION_FAIL });
   }
@@ -52,6 +53,7 @@ const initialState = {
 export default (state = initialState, action) => {
   const { type, payload } = action;
   let { messages } = state;
+  console.log(action);
 
   if (type === INPUT_SUCCESS) {
     messages = [...messages, { message: payload, type: 'user' }];
@@ -67,7 +69,7 @@ export default (state = initialState, action) => {
   }
 
   if (type === SESSION_SUCCESS) {
-    localStorage.setItem('session', payload['session_id']);
+    localStorage.setItem('session', payload.result.session_id);
     return {
       ...state,
     };

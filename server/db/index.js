@@ -4,4 +4,4 @@ const db = require('./db');
 
 //model associations would go here:
 
-module.exports = { db };
+module.exports = db;

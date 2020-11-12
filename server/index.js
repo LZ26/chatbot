@@ -1,31 +1,63 @@
-const express = require('express');
 const path = require('path');
-const volleyball = require('volleyball');
-
+const express = require('express');
+const morgan = require('morgan');
+const db = require('./db');
+const PORT = process.env.PORT || 3000;
 const app = express();
+const socketio = require('socket.io');
 
-// logging middleware
-// Only use logging middleware when not running tests
-const debug = process.env.NODE_ENV === 'test';
-app.use(volleyball.custom({ debug }));
+const createApp = () => {
+  app.use(morgan('dev'));
 
-// body parsing middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-// static middleware
-app.use(express.static(path.join(__dirname, '../public')));
+  app.use('/api', require('./api'));
 
-app.use('/api', require('./api')); // include our routes!
+  app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
-}); // Send index.html for any other requests
+  app.use((req, res, next) => {
+    if (path.extname(req.path).length) {
+      const error = new Error('NOT FOUND');
+      error.status = 404;
+      next(error);
+    } else {
+      next();
+    }
+  });
 
-// error handling middleware
-app.use((err, req, res, next) => {
-  if (process.env.NODE_ENV !== 'test') console.error(err.stack);
-  res.status(err.status || 500).send(err.message || 'Internal server error');
-});
+  app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public/index.html'));
+  });
+
+  app.use((err, req, res, next) => {
+    console.error(err);
+    console.error(err.stack);
+    res.status(err.status || 500).send(err.message || 'Internal server error.');
+  });
+};
+
+const serverListen = () => {
+  const server = app.listen(PORT, () =>
+    console.log(`Listening on port ${PORT}`)
+  );
+
+  const io = socketio(server);
+  require('./socket')(io);
+};
+
+const syncDb = () => db.sync();
+
+async function startApp() {
+  await syncDb();
+  await createApp;
+  await serverListen();
+}
+
+if (require.main === module) {
+  startApp();
+} else {
+  createApp();
+}
 
 module.exports = app;

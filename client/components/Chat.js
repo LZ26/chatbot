@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { userMessage } from '../store/redux/chats';
+import { userMessage, sendMessage } from '../store/redux/chats';
 
-const Chat = ({ chat, userMessage }) => {
+const Chat = ({ chat, userMessage, sendMessage }) => {
   //handle user message
   const [message, setMessage] = useState('');
 
@@ -13,23 +13,23 @@ const Chat = ({ chat, userMessage }) => {
     if (code === 13) {
       console.log(message);
       userMessage(message);
+      sendMessage(message);
       setMessage('');
     }
   };
-  console.log(localStorage);
 
   return (
     <div className="chat">
       <h1>Customer Care Chatbot (CCBot)</h1>
-      {/*handle messages */}
       {chat.length === 0
         ? ''
-        : chat.map((txt) => (
-            <div key={txt.id} className={txt.type}>
-              {txt.message}
-            </div>
-          ))}
-      {/*input box */}
+        : chat.map((txt) => {
+            return (
+              <div key={txt.id} className={txt.type}>
+                {txt.message}
+              </div>
+            );
+          })}
       <input
         id="chatField"
         onChange={(ev) => setMessage(ev.target.value)}
@@ -44,4 +44,4 @@ const mapStateToProps = (state) => ({
   chat: state.chats.messages,
 });
 
-export default connect(mapStateToProps, { userMessage })(Chat);
+export default connect(mapStateToProps, { userMessage, sendMessage })(Chat);

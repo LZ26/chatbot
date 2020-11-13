@@ -7,12 +7,12 @@ import Home from './components/Home';
 import { newSession } from './store/redux/chats';
 import axios from 'axios';
 
-// if (localStorage.session) {
-//   delete axios.defaults.headers.common['session_id'];
-//   axios.defaults.headers.common['session_id'] = localStorage.session;
-// } else {
-//   delete axios.defaults.headers.common['session_id'];
-// }
+if (localStorage.session) {
+  delete axios.defaults.headers.common['session_id'];
+  axios.defaults.headers.common['session_id'] = localStorage.session;
+} else {
+  delete axios.defaults.headers.common['session_id'];
+}
 
 const App = () => {
   useEffect(() => {

@@ -33,11 +33,10 @@ export const newSession = () => async (dispatch) => {
 
 export const sendMessage = (message) => async (dispatch) => {
   try {
-    const content = { input: message };
-    const { output } = await axios.post('/api/chats/message', content).data;
+    const response = await axios.post('/api/chats/message', { input: message });
     dispatch({
       type: MESSAGE_SUCCESS,
-      payload: output.generic[0].text,
+      payload: response.data.output.generic[0].text,
     });
   } catch (err) {
     dispatch({ type: MESSAGE_FAIL });
@@ -53,7 +52,6 @@ const initialState = {
 export default (state = initialState, action) => {
   const { type, payload } = action;
   let { messages } = state;
-  console.log(action);
 
   if (type === INPUT_SUCCESS) {
     messages = [...messages, { message: payload, type: 'user' }];

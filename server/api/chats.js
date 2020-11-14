@@ -19,8 +19,7 @@ router.get('/session', async (req, res) => {
     });
     res.json(session);
   } catch (err) {
-    res.send('There was an error processing your request');
-    console.log(err);
+    next(err);
   }
 });
 

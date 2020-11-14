@@ -21,9 +21,9 @@ export const userMessage = (message) => async (dispatch) => {
 
 export const newSession = () => async (dispatch) => {
   try {
-    const res = await axios.get('/api/chats/session');
+    const { data } = await axios.get('/api/chats/session');
 
-    dispatch({ type: SESSION_SUCCESS, payload: res.data });
+    dispatch({ type: SESSION_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: SESSION_FAIL });
   }
@@ -92,6 +92,7 @@ export default (state = initialState, action) => {
       ...state,
     };
   }
+
   return {
     ...state,
   };

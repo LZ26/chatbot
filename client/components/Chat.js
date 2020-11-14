@@ -23,25 +23,37 @@ const Chat = ({ chat, userMessage, sendMessage }) => {
       setMessage('');
     }
   };
+  const date = new Date().toLocaleTimeString().split(':').slice(0, 2).join(':');
+
+  const refreshPage = () => {
+    window.location.reload(false);
+  };
 
   return (
     <div className="chat">
-      {/* <div>
-        <h1>Customer Care Chatbot (CCBot)</h1>
-      </div> */}
+      <div className="box">
+        <button className="chat-button" type="submit" onClick={refreshPage}>
+          <strong>Disconnect</strong>
+        </button>
+      </div>
       <div className="chat-history">
         {chat.length === 0
           ? ''
-          : chat.map((txt) => {
+          : chat.map((txt, index) => {
+              const capitalized = txt.type[0].toUpperCase() + txt.type.slice(1);
               return (
-                <div key={txt.id} className={txt.type}>
+                <div key={index} className={txt.type}>
                   {txt.message}
+                  <br />
+                  <div className="simple-box">
+                    <span className="date">{date}</span>
+                    <span className="nickname">{capitalized}</span>
+                  </div>
                 </div>
               );
             })}
         <div className="scroller" ref={messageEnd}></div>
       </div>
-
       <input
         id="chatField"
         onChange={(ev) => setMessage(ev.target.value)}

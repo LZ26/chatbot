@@ -17,7 +17,7 @@ router.get('/session', async (req, res) => {
     const session = await assistant.createSession({
       assistantId: process.env.WATSON_ASSISTANT_ID,
     });
-    res.json(session);
+    res.send(session);
   } catch (err) {
     next(err);
   }
